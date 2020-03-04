@@ -315,7 +315,10 @@ def main(address='00:24:44:F0:AD:EE'):
     print 'Thanks for using me'
 
   # Disconnect the balance board after exiting.
-  subprocess.check_output(["bluez-test-device", "disconnect", address])
+  try:
+    subprocess.check_output(["bluez-test-device", "disconnect", address])
+  except:
+    pass
 
 if __name__ == "__main__":
   main()

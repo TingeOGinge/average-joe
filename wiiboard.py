@@ -313,6 +313,8 @@ def main(address='00:24:44:F0:AD:EE'):
       processor.reset()
   except KeyboardInterrupt:
     print 'Thanks for using me'
+  except requests.exceptions.RequestException as e:
+    print 'Network Error'
 
   # Disconnect the balance board after exiting.
   try:

@@ -293,23 +293,26 @@ def main(address='00:24:44:F0:AD:EE'):
 
   print "Trying to connect..."
   board.connect(address)  # The wii board must be in sync mode at this time
-  while True:
-    board.wait(200)
-    # Flash the LED so we know we can step on.
-    board.setLight(False)
-    board.wait(500)
-    board.setLight(True)
-    board.receive()
-
-    payload = {'weight': processor.weight}
-    headers = {'Content-Type': 'application/json'}
-
-    response = requests.post('http://192.168.0.21:5000/api/receive', headers=headers, data=json.dumps(payload))
-
-    if response.status_code == 200: print 'weight logged'
-    else: print response.status_code
-
-    processor.reset()
+  try:
+    while True:
+      board.wait(200)
+      # Flash the LED so we know we can step on.
+      board.setLight(False)
+      board.wait(500)
+      board.setLight(True)
+      board.receive()
+    
+      payload = {'weight': processor.weight}
+      headers = {'Content-Type': 'application/json'}
+    
+      response = requests.post('http://192.168.0.21:5000/api/receive', headers=headers, data=json.dumps(payload))
+    
+      if response.status_code == 200: print 'weight logged'
+      else: print response.status_code
+    
+      processor.reset()
+  except KeyboardInterrupt:
+    print 'Thanks for using me'
 
   # Disconnect the balance board after exiting.
   subprocess.check_output(["bluez-test-device", "disconnect", address])

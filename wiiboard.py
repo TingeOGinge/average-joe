@@ -4,6 +4,8 @@ import collections
 import time
 import bluetooth
 import subprocess
+import requests
+import json
 
 CONTINUOUS_REPORTING = "04"  # Easier as string with leading zero
 
@@ -129,6 +131,7 @@ class Wiiboard:
       if intype == INPUT_STATUS:
         # TODO: Status input received. It just tells us battery life really
         self.setReportingType()
+        self.setReportingType()
       elif intype == INPUT_READ_DATA:
         if self.calibrationRequested:
           packetLength = (int(str(data[4]).encode("hex"), 16) / 16 + 1)
@@ -232,7 +235,6 @@ class Wiiboard:
         self.calibration[2][i] = (int(bytes[index].encode("hex"), 16) << 8) + int(bytes[index + 1].encode("hex"), 16)
         index += 2
 
-  # Send <data> to the Wiiboard
   # <data> should be an array of strings, each string representing a single hex byte
   def send(self, data):
     if self.status != "Connected":
@@ -299,9 +301,15 @@ def main(address='00:24:44:F0:AD:EE'):
     board.setLight(True)
     board.receive()
 
-    print processor.weight
+    payload = {'weight': processor.weight}
+    headers = {'Content-Type': 'application/json'}
 
-    board.processor.reset()
+    response = requests.post('http://192.168.0.21:5000/api/receive', headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 200: print 'weight logged'
+    else: print response.status_code
+
+    processor.reset()
 
   # Disconnect the balance board after exiting.
   subprocess.check_output(["bluez-test-device", "disconnect", address])

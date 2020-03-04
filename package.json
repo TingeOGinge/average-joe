@@ -1,0 +1,26 @@
+{
+  "name": "average-joe",
+  "version": "1.0.0",
+  "description": "personal scale with no display ",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TingeOGinge/average-joe.git"
+  },
+  "author": "Dillon O'Shea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TingeOGinge/average-joe/issues"
+  },
+  "homepage": "https://github.com/TingeOGinge/average-joe#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  }
+}
